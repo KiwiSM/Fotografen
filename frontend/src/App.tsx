@@ -1,16 +1,19 @@
 import './App.css';
 import React from "react";
-import LandingPage from './Components/LandingPage';
-import TakePhoto from './Components/TakePhoto';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import LandingPage from './Pages/LandingPage';
+import Login from './Pages/Login';
+import Register from './Pages/Register';
 
 export default function App() {
   return (
-    <section className="App">
-      <header className="App-header">
-      <h1>Helloooo</h1>
-      <TakePhoto />
-      <LandingPage />
-      </header>
-    </section>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />}/>        
+        <Route path="/login" element={<Login />}/>
+        <Route path="/register" element={<Register />}/>
+      </Routes>
+    </Router>
   );
 };
