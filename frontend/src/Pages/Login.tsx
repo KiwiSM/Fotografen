@@ -2,7 +2,7 @@ import React from "react";
 import { useRef, useState } from "react";
 
 export default function Login() {
-    const [checkAccount, setCheckAccount] = useState<Object>()
+    const [checkAccount, setCheckAccount] = useState<Object>();
     const username = useRef(null);
     const password = useRef(null);
 
@@ -28,9 +28,9 @@ export default function Login() {
     
     return (
         <section className="App">
-            <input ref={username} type="text" id="username" placeholder="Username" />
-            <input ref={password} type="password" id="password" placeholder="Password" />
-            <button onClick={CheckAccount} id="login-button">Log in</button>
+            <input ref={username} type="text" placeholder="Username" />
+            <input ref={password} type="password" placeholder="Password" />
+            <button onClick={CheckAccount}>Log in</button>
         </section>
     )
 }
