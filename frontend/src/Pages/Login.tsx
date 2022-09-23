@@ -1,7 +1,36 @@
 import React from "react";
+import { useRef, useState } from "react";
 
 export default function Login() {
+    const [checkAccount, setCheckAccount] = useState<Object>()
+    const username = useRef(null);
+    const password = useRef(null);
+
+/*     async function Login(account) {
+        const response = await fetch("http://localhost:5000/login", {
+            method: "POST",
+            body: JSON.stringify(account),
+            headers: {"Content-Type": "application/json"}
+        });
+        const data = await response.json();
+    } */
+
+    function CheckAccount() {
+        let account = {
+            username: username.current.value,
+            password: password.current.value
+        };
+
+        setCheckAccount(account)
+    }
+
+    console.log(checkAccount);
+    
     return (
-        <h1>This is the Log In page</h1>
+        <section className="App">
+            <input ref={username} type="text" id="username" placeholder="Username" />
+            <input ref={password} type="password" id="password" placeholder="Password" />
+            <button onClick={CheckAccount} id="login-button">Log in</button>
+        </section>
     )
 }
