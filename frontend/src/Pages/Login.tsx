@@ -1,36 +1,38 @@
 import React from "react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 export default function Login() {
-    const [checkAccount, setCheckAccount] = useState<Object>();
     const username = useRef(null);
     const password = useRef(null);
 
-/*     async function Login(account) {
-        const response = await fetch("http://localhost:5000/login", {
+    interface Account {
+        username: string;
+        password: string;
+    }
+
+    async function RegisterLogin(account: Account) {
+        const response = await fetch("http://localhost:3000/login", {
             method: "POST",
             body: JSON.stringify(account),
-            headers: {"Content-Type": "application/json"}
+            headers: {"Content-Type" : "application/json"}
         });
         const data = await response.json();
-    } */
+        console.log(data);
+    }
 
-    function CheckAccount() {
-        let account = {
+    function CheckLogin() {
+        let account: Account = {
             username: username.current.value,
             password: password.current.value
         };
-
-        setCheckAccount(account)
+        RegisterLogin(account);
     }
 
-    console.log(checkAccount);
-    
     return (
         <section className="App">
             <input ref={username} type="text" placeholder="Username" />
             <input ref={password} type="password" placeholder="Password" />
-            <button onClick={CheckAccount}>Log in</button>
+            <button onClick={CheckLogin}>Log in</button>
         </section>
     )
 }
