@@ -1,9 +1,11 @@
 import React from "react";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const username = useRef(null);
     const password = useRef(null);
+    const navigate = useNavigate();
 
     interface Account {
         username: string;
@@ -17,6 +19,9 @@ export default function Login() {
             headers: {"Content-Type" : "application/json"}
         });
         const data = await response.json();
+        if(data.success) {
+            navigate("/fotografen");
+        }
         console.log(data);
     }
 

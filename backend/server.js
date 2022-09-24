@@ -11,15 +11,44 @@ app.use(cors({origin: "*"}));
 const accountsDB = new nedb({filename: "accounts.db", autoload: true});
 
 app.post("/login", async (request, response) => {
-    const account = request.body;
-    accountsDB.insert(account);
-    response.json(account);
+    const credentials = request.body;
+    const resObj = {
+        success: false,
+    }
+
+    const account = await accountsDB.find({username: credentials.username});
+    if(account.length > 0) {
+        if(credentials.password == account[0].password) {
+            resObj.success = true; 
+        } 
+    }
+    response.json(resObj);
 });
 
 app.post("/register", async (request, response) => {
-    const account = request.body;
-    accountsDB.insert(account);
-    response.json(account);
+    const credentials = request.body;
+    const resObj = {
+        success: true,
+        usernameExists: false,
+        emailExists: false
+    }
+
+    const usernameExists = await accountsDB.find({ username: credentials.username });
+    const emailExists = await accountsDB.find({ email: credentials.email });
+
+    if(usernameExists.length > 0) {
+        resObj.usernameExists = true;
+    }
+    if(emailExists.length > 0) {
+        resObj.emailExists = true;
+    }
+    if(resObj.usernameExists || resObj.emailExists) {
+        resObj.success = false;
+    } else {
+        accountsDB.insert(credentials);
+    }
+
+    response.json(resObj)
 });
 
 app.listen(port, function(err){
