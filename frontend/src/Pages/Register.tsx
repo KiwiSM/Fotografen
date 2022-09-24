@@ -1,18 +1,20 @@
 import React from "react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function Register() {
     const username = useRef(null);
     const email = useRef(null);
     const password = useRef(null);
+    const [admin, setAdmin] = useState<boolean>(false);
 
     interface Account {
         username: string,
         email: string,
-        password: any
+        password: any,
+        admin: boolean
     }
 
-    async function RegisterAccount(account) {
+    async function RegisterAccount(account: Account) {
         const response = await fetch("http://localhost:3000/register", {
             method: "POST",
             body: JSON.stringify(account),
@@ -23,18 +25,35 @@ export default function Register() {
     }
 
     function CheckAccount() {
-        let account: Account = {
-            username: username.current.value,
-            email: email.current.value,
-            password: password.current.value
-        };
+        let account: Account
+
+        if(admin) {
+                account = {
+                username: username.current.value,
+                email: email.current.value,
+                password: password.current.value,
+                admin: admin
+            };
+        } else {
+                account = {
+                username: username.current.value,
+                email: null,
+                password: password.current.value,
+                admin: admin
+            };
+        }
         RegisterAccount(account);
+    };
+
+    function checkAdmin() {
+        setAdmin(!admin);
     }
     
     return (
         <section className="App">
             <input ref={username} type="text" placeholder="Username" />
-            <input ref={email} type="text" placeholder="Email" />
+            <input onClick={checkAdmin} type="checkbox" name="admin" id="admin" />
+            { admin ? <input ref={email} type="text" placeholder="Email" /> : null}
             <input ref={password} type="password" placeholder="Password" />
             <button onClick={CheckAccount}>Register Account</button>
         </section>
