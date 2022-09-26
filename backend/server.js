@@ -50,11 +50,12 @@ app.post("/register", async (request, response) => {
     response.json(resObj)
 });
 
-/* app.post("/fotografen", async (request, response) => {
+app.post("/fotografen", async (request, response) => {
     const credentials = request.body;
-    const usernameExists = await accountsDB.find({ username: credentials });
+    const usernameExists = await accountsDB.find({ username: credentials.user });
     response.json(usernameExists);
-}) */
+    console.log(credentials);
+})
 
 app.post("/fotografen", async (request, response) => {
     const image = request.body;
