@@ -6,14 +6,23 @@ export default function TakePhoto() {
   const [hasPhoto, setHasPhoto] = useState<boolean>(false);
   const [photo, setPhoto] = useState(null);
 
-  async function StoreImage() {
+  async function StoreImage(image:any) {
+    let userImage:string[] = []
+    const user:string = localStorage.getItem("username");
+    userImage.push(user, ...image);
+    console.log(image);
+    
+    let userImageObject: object = {
+      username: user,
+      image: image[0]
+    }
     const response = await fetch("http://localhost:3000/fotografen", {
       method: "POST",
-      //body: JSON.stringify(),
+      body: JSON.stringify(userImageObject),
       headers: {"Content-Type" : "application/json"}
     });
     const data = await response.json();
-    console.log(data);
+    console.log(userImageObject);
   }
 
   const getVideo = () => {
@@ -42,14 +51,14 @@ export default function TakePhoto() {
     let ctx = photo.getContext("2d");
     ctx.drawImage(video, 0, 0, width, height);
 
-/*     var images:any = [];
+    //Kolla på den här variabeln??!!
+    var images:any = [];
+    console.log(images);
+    
     images.push(photo.toDataURL("image/jpeg"));
-    localStorage.setItem("photo", images); */
-
-    setPhoto(photo.toDataURL("image/jpeg"));
+    StoreImage(images)
 
     setHasPhoto(true);
-    //StoreImage();
   }
 
   function Record() {

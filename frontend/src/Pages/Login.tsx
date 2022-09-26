@@ -21,7 +21,7 @@ export default function Login() {
         const data = await response.json();
         if(data.success) {
             navigate("/fotografen");
-            //localStorage.setItem("username", account.username)
+            localStorage.setItem("username", account.username)
         }
         console.log(data);
     }

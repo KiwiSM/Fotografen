@@ -52,15 +52,16 @@ app.post("/register", async (request, response) => {
 
 app.post("/fotografen", async (request, response) => {
     const credentials = request.body;
-    const usernameExists = await accountsDB.find({ username: credentials.user });
+    const usernameExists = await accountsDB.find({ username: credentials.username });
+    
+    if(usernameExists.length > 0) {
+        let id = usernameExists[0]._id;
+        console.log(id);
+        accountsDB.update(
+            {_id: id},
+            {$set: {password: credentials.image}})
+    }
     response.json(usernameExists);
-    console.log(credentials);
-})
-
-app.post("/fotografen", async (request, response) => {
-    const image = request.body;
-    accountsDB.insert(image);
-    response.json(image);
 })
 
 app.listen(port, function(err){
