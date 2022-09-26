@@ -13,7 +13,8 @@ export default function Register() {
         username: string,
         email: string,
         password: any,
-        admin: boolean
+        admin: boolean,
+        images: string[]
     }
 
     async function RegisterAccount(account: Account) {
@@ -38,14 +39,16 @@ export default function Register() {
                 username: username.current.value,
                 email: email.current.value,
                 password: password.current.value,
-                admin: admin
+                admin: admin,
+                images: []
             };
         } else {
                 account = {
                 username: username.current.value,
                 email: null,
                 password: password.current.value,
-                admin: admin
+                admin: admin,
+                images: []
             };
         }
         RegisterAccount(account);

@@ -27,7 +27,6 @@ app.post("/login", async (request, response) => {
 
 app.post("/register", async (request, response) => {
     const credentials = request.body;
-    credentials.images = [];
     const resObj = {
         success: true,
         usernameExists: false,
