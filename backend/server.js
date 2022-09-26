@@ -27,6 +27,7 @@ app.post("/login", async (request, response) => {
 
 app.post("/register", async (request, response) => {
     const credentials = request.body;
+    credentials.images = [];
     const resObj = {
         success: true,
         usernameExists: false,
@@ -53,13 +54,13 @@ app.post("/register", async (request, response) => {
 app.post("/fotografen", async (request, response) => {
     const credentials = request.body;
     const usernameExists = await accountsDB.find({ username: credentials.username });
-    
+
     if(usernameExists.length > 0) {
         let id = usernameExists[0]._id;
         console.log(id);
         accountsDB.update(
             {_id: id},
-            {$set: {password: credentials.image}})
+            {$push: {images: credentials.image}})
     }
     response.json(usernameExists);
 })

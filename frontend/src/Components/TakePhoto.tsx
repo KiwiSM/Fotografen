@@ -51,7 +51,7 @@ export default function TakePhoto() {
     let ctx = photo.getContext("2d");
     ctx.drawImage(video, 0, 0, width, height);
 
-    //Kolla på den här variabeln??!!
+    //Kolla på den här variabeln??!! 
     var images:any = [];
     console.log(images);
     
