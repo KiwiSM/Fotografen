@@ -1,11 +1,13 @@
 import React from "react";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
     const username = useRef(null);
     const email = useRef(null);
     const password = useRef(null);
     const [admin, setAdmin] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     interface Account {
         username: string,
@@ -22,6 +24,10 @@ export default function Register() {
         });
         const data = await response.json();
         console.log(data);
+        
+        if(data.success) {
+            navigate("/login");
+        }
     }
 
     function CheckAccount() {

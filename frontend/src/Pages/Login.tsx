@@ -21,6 +21,7 @@ export default function Login() {
         const data = await response.json();
         if(data.success) {
             navigate("/fotografen");
+            //localStorage.setItem("username", account.username)
         }
         console.log(data);
     }
@@ -34,7 +35,7 @@ export default function Login() {
     }
 
     return (
-        <section className="App">
+        <section className="App"> 
             <input ref={username} type="text" placeholder="Username" />
             <input ref={password} type="password" placeholder="Password" />
             <button onClick={CheckLogin}>Log in</button>

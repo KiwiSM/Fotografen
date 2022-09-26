@@ -47,9 +47,20 @@ app.post("/register", async (request, response) => {
     } else {
         accountsDB.insert(credentials);
     }
-
     response.json(resObj)
 });
+
+/* app.post("/fotografen", async (request, response) => {
+    const credentials = request.body;
+    const usernameExists = await accountsDB.find({ username: credentials });
+    response.json(usernameExists);
+}) */
+
+app.post("/fotografen", async (request, response) => {
+    const image = request.body;
+    accountsDB.insert(image);
+    response.json(image);
+})
 
 app.listen(port, function(err){
     if (err) console.log("Error in server setup");
