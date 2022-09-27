@@ -20,7 +20,6 @@ app.post("/register", async (request, response) => {
     }
 
     const usernameExists = await accountsDB.find({ username: credentials.username });
-
     if(usernameExists.length > 0) {
         resObj.usernameExists = true;
     }
