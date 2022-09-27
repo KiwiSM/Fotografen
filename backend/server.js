@@ -55,15 +55,21 @@ app.post("/register", async (request, response) => {
 app.post("/take-picture", async (request, response) => {
     const credentials = request.body;
     picturesDB.insert(credentials)
-    //response.json();
 });
-
-//***************** ARBETA HÄR *****************
 
 app.post("/fotografen", async (request, response) => {
     const credentials = request.body;
-    const usernameExists = await picturesDB.find({ username: credentials.user });
-    response.json(usernameExists);
+    const user = await accountsDB.find({ username: credentials.user });
+    if(user.length > 0) {
+        if(user[0].admin == true) {
+            console.log("hej");
+            const admin = await picturesDB.find({ admin: true})
+            response.json(admin);
+        } else {
+            const usernameExists = await picturesDB.find({ username: credentials.user });
+            response.json(usernameExists);
+        }   
+    }
 });
 
 app.delete("/images", async (request, response) => {
@@ -73,8 +79,6 @@ app.delete("/images", async (request, response) => {
     });
     console.log(deletePicture, "deleted");
 })
-
-//***************** ARBETA HÄR *****************
 
 app.listen(port, function(err){
     if (err) console.log("Error in server setup");
