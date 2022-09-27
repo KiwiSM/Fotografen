@@ -7,22 +7,19 @@ export default function TakePhoto() {
   const [photo, setPhoto] = useState(null);
 
   async function StoreImage(image:any) {
-    let userImage:string[] = []
     const user:string = localStorage.getItem("username");
-    userImage.push(user, ...image);
-    console.log(image);
     
     let userImageObject: object = {
       username: user,
-      image: image[0]
+      image: image
     }
-    const response = await fetch("http://localhost:3000/fotografen", {
+    
+    const response = await fetch("http://localhost:3000/take-picture", {
       method: "POST",
       body: JSON.stringify(userImageObject),
       headers: {"Content-Type" : "application/json"}
     });
     const data = await response.json();
-    console.log(userImageObject);
   }
 
   const getVideo = () => {
@@ -38,7 +35,7 @@ export default function TakePhoto() {
     });
   };
 
-  const TakePhoto = () => {
+  const TakePicture = () => {
     const width = 414;
     const height = width / (16/9);
 
@@ -52,12 +49,7 @@ export default function TakePhoto() {
     ctx.drawImage(video, 0, 0, width, height);
 
     //Kolla på den här variabeln??!! 
-    var images:any = [];
-    console.log(images);
-    
-    images.push(photo.toDataURL("image/jpeg"));
-    StoreImage(images)
-
+    StoreImage(photo.toDataURL("image/jpeg"));
     setHasPhoto(true);
   }
 
@@ -73,7 +65,7 @@ export default function TakePhoto() {
         </div>
         <div className={'result' + (hasPhoto ? 'hasPhoto' : '')}>
           <canvas ref={photoRef}></canvas>
-          <button onClick={TakePhoto}>Take a picture</button>
+          <button onClick={TakePicture}>Take a picture</button>
         </div>
       </section>
     );

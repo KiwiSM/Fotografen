@@ -4,11 +4,13 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const app = express();
 const port = 3000;
+const fs = require("fs");
 
 app.use(express.json());
 app.use(cors({origin: "*"}));
 
 const accountsDB = new nedb({filename: "accounts.db", autoload: true});
+const picturesDB = new nedb({filename: "pictures.db", autoload: true});
 
 app.post("/login", async (request, response) => {
     const credentials = request.body;
@@ -50,19 +52,29 @@ app.post("/register", async (request, response) => {
     response.json(resObj)
 });
 
+app.post("/take-picture", async (request, response) => {
+    const credentials = request.body;
+    picturesDB.insert(credentials)
+    //response.json();
+});
+
+//***************** ARBETA HÄR *****************
+
 app.post("/fotografen", async (request, response) => {
     const credentials = request.body;
-    const usernameExists = await accountsDB.find({ username: credentials.username });
-
-    if(usernameExists.length > 0) {
-        let id = usernameExists[0]._id;
-        console.log(id);
-        accountsDB.update(
-            {_id: id},
-            {$push: {images: credentials.image}})
-    }
+    const usernameExists = await picturesDB.find({ username: credentials.user });
     response.json(usernameExists);
+});
+
+app.delete("/images", async (request, response) => {
+    const data = request.body;
+    const deletePicture = await picturesDB.remove({
+        image: data.picture.image
+    });
+    console.log(deletePicture, "deleted");
 })
+
+//***************** ARBETA HÄR *****************
 
 app.listen(port, function(err){
     if (err) console.log("Error in server setup");
