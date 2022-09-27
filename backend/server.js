@@ -60,6 +60,7 @@ app.post("/fotografen", async (request, response) => {
             response.json(admin);
         } else {
             const usernameExists = await picturesDB.find({ username: credentials.user });
+            console.log(usernameExists);
             response.json(usernameExists);
         }   
     }
@@ -67,17 +68,18 @@ app.post("/fotografen", async (request, response) => {
 
 app.delete("/pictures", async (request, response) => {
     const data = request.body;
+    console.log(data);
     const deletePicture = await picturesDB.remove({
-        image: data.picture.image
+        image: data.image
     });
 
-    const user = await accountsDB.find({ username: data.picture.username });
+    const user = await accountsDB.find({ username: data.username });
     if(user.length > 0) {
         if(user[0].admin == true) {
             const admin = await picturesDB.find({ admin: true})
             response.json(admin);
         } else {
-            const usernameExists = await picturesDB.find({ username: data.picture.username });
+            const usernameExists = await picturesDB.find({ username: data.username });
             response.json(usernameExists);
         }   
     }

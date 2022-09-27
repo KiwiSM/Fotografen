@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 export default function Fotografen() {
     const videoRef = useRef(null);
     const photoRef = useRef(null);
     const [hasPhoto, setHasPhoto] = useState<boolean>(false);
-    const [photos, setPhotos] = useState<string[]>([]);
+    const [photos, setPhotos] = useState<any>({});
 
     const getVideo = () => {
         navigator.mediaDevices.getUserMedia({
@@ -32,12 +32,43 @@ export default function Fotografen() {
         let ctx = photo.getContext("2d");
         ctx.drawImage(video, 0, 0, width, height);
 
-        StoreImage(photo.toDataURL("image/jpeg"));
+        let picture = {
+            id: Math.floor(Math.random() * 1000),
+            URL: photo.toDataURL("image/jpeg")
+        }
+
+        StorePicture(picture);
         setHasPhoto(true);
-        GetPhotos();
     }
 
-    async function StoreImage(image:any) {
+    async function StorePicture(image:any) {
+        let images = document.createElement("img");
+        images.src = image.URL;
+
+        let deleteButton = document.createElement("button");
+        deleteButton.innerText = "Delete";
+
+        let divElem = document.createElement("div");
+        divElem.append(images);
+        divElem.append(deleteButton);
+        document.getElementById("pictures").append(divElem);
+        divElem.setAttribute("id", image.id);
+
+        deleteButton.addEventListener("click", () => {
+            document.getElementById(`${image.id}`).remove()
+            async function deletePicture() {
+                const response = await fetch("http://localhost:3000/pictures", 
+                {
+                  method: "DELETE",
+                  headers: {"Content-Type": "application/json"},
+                  body: JSON.stringify({image})
+                });
+                const data = await response.json();
+                setPhotos(data);
+            };
+            deletePicture();
+        });
+
         const user:string = localStorage.getItem("username");
         
         let userImageObject: object = {
@@ -54,42 +85,6 @@ export default function Fotografen() {
         const data = await response.json();
     };
 
-    async function GetPhotos() {
-        const user = localStorage.getItem("username");
-        const response = await fetch("http://localhost:3000/fotografen", {
-            method: "POST",
-            body: JSON.stringify({user}),
-            headers: { "Content-Type" : "application/json" }
-        });
-        const data = await response.json();
-        setPhotos(data);
-    };
-
-    useEffect(() => {
-        photos.forEach((picture:any) => {
-            let images = document.createElement("img");
-            images.src = picture.image
-            let deleteButton = document.createElement("button");
-            deleteButton.innerText = "Delete"
-        
-            deleteButton.addEventListener("click", () => {
-                async function deletePicture() {
-                    const response = await fetch("http://localhost:3000/pictures", 
-                    {
-                      method: "DELETE",
-                      headers: {"Content-Type": "application/json"},
-                      body: JSON.stringify({picture})
-                    });
-                    const data = await response.json();
-                    setPhotos(data)
-                };
-                deletePicture();
-            });
-            document.getElementById("pictures").appendChild(images);
-            document.getElementById("pictures").appendChild(deleteButton);
-        });
-    }, [photos]);
-
     return (
         <section className="App-fotografen">
             <div className="camera">
@@ -101,7 +96,6 @@ export default function Fotografen() {
                 <canvas ref={photoRef}></canvas>
             </div>
             <h1>All available pictures will be displayed below</h1>
-            <button onClick={GetPhotos}>Show Pictures</button>
             <ul id="pictures"></ul>
         </section>
     );
