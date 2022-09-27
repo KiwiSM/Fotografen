@@ -24,7 +24,6 @@ export default function Register() {
             headers: {"Content-Type" : "application/json"}
         });
         const data = await response.json();
-        console.log(data);
         
         if(data.success) {
             navigate("/login");
@@ -61,9 +60,10 @@ export default function Register() {
     return (
         <section className="App">
             <input ref={username} type="text" placeholder="Username" />
+            <input ref={password} type="password" placeholder="Password" />
+            <h3>Do you want to register as an admin?</h3>
             <input onClick={checkAdmin} type="checkbox" name="admin" id="admin" />
             { admin ? <input ref={email} type="text" placeholder="Email" /> : null}
-            <input ref={password} type="password" placeholder="Password" />
             <button onClick={CheckAccount}>Register Account</button>
         </section>
     )

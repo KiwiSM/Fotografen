@@ -23,7 +23,6 @@ export default function Login() {
             navigate("/fotografen");
             localStorage.setItem("username", account.username)
         }
-        console.log(data);
     }
 
     function CheckLogin() {
@@ -35,7 +34,7 @@ export default function Login() {
     }
 
     return (
-        <section className="App"> 
+        <section className="App">
             <input ref={username} type="text" placeholder="Username" />
             <input ref={password} type="password" placeholder="Password" />
             <button onClick={CheckLogin}>Log in</button>

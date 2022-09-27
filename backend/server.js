@@ -12,6 +12,26 @@ app.use(cors({origin: "*"}));
 const accountsDB = new nedb({filename: "accounts.db", autoload: true});
 const picturesDB = new nedb({filename: "pictures.db", autoload: true});
 
+app.post("/register", async (request, response) => {
+    const credentials = request.body;
+    const resObj = {
+        success: true,
+        usernameExists: false
+    }
+
+    const usernameExists = await accountsDB.find({ username: credentials.username });
+
+    if(usernameExists.length > 0) {
+        resObj.usernameExists = true;
+    }
+    if(resObj.usernameExists) {
+        resObj.success = false;
+    } else {
+        accountsDB.insert(credentials);
+    }
+    response.json(resObj);
+});
+
 app.post("/login", async (request, response) => {
     const credentials = request.body;
     const resObj = {
@@ -27,31 +47,6 @@ app.post("/login", async (request, response) => {
     response.json(resObj);
 });
 
-app.post("/register", async (request, response) => {
-    const credentials = request.body;
-    const resObj = {
-        success: true,
-        usernameExists: false,
-        emailExists: false
-    }
-
-    const usernameExists = await accountsDB.find({ username: credentials.username });
-    const emailExists = await accountsDB.find({ email: credentials.email });
-
-    if(usernameExists.length > 0) {
-        resObj.usernameExists = true;
-    }
-    if(emailExists.length > 0) {
-        resObj.emailExists = true;
-    }
-    if(resObj.usernameExists || resObj.emailExists) {
-        resObj.success = false;
-    } else {
-        accountsDB.insert(credentials);
-    }
-    response.json(resObj)
-});
-
 app.post("/take-picture", async (request, response) => {
     const credentials = request.body;
     picturesDB.insert(credentials)
@@ -62,7 +57,6 @@ app.post("/fotografen", async (request, response) => {
     const user = await accountsDB.find({ username: credentials.user });
     if(user.length > 0) {
         if(user[0].admin == true) {
-            console.log("hej");
             const admin = await picturesDB.find({ admin: true})
             response.json(admin);
         } else {
@@ -72,18 +66,15 @@ app.post("/fotografen", async (request, response) => {
     }
 });
 
-app.delete("/images", async (request, response) => {
+app.delete("/pictures", async (request, response) => {
     const data = request.body;
-    console.log(data);
     const deletePicture = await picturesDB.remove({
         image: data.picture.image
     });
-    console.log(deletePicture, "deleted");
+
     const user = await accountsDB.find({ username: data.picture.username });
-    console.log(user);
     if(user.length > 0) {
         if(user[0].admin == true) {
-            console.log("hej");
             const admin = await picturesDB.find({ admin: true})
             response.json(admin);
         } else {

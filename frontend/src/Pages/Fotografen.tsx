@@ -9,7 +9,7 @@ export default function Fotografen() {
     const getVideo = () => {
         navigator.mediaDevices.getUserMedia({
         audio: false,
-        video: true
+        video: { width: 300, height: 300 / (16/9)  }
         }).then(stream => {
         let video = videoRef.current;
         video.srcObject = stream;
@@ -20,7 +20,7 @@ export default function Fotografen() {
     };
 
     const TakePicture = () => {
-        const width = 414;
+        const width = 150;
         const height = width / (16/9);
 
         let video = videoRef.current;
@@ -62,7 +62,6 @@ export default function Fotografen() {
             headers: { "Content-Type" : "application/json" }
         });
         const data = await response.json();
-        console.log(data);
         setPhotos(data);
     };
 
@@ -75,7 +74,7 @@ export default function Fotografen() {
         
             deleteButton.addEventListener("click", () => {
                 async function deletePicture() {
-                    const response = await fetch("http://localhost:3000/images", 
+                    const response = await fetch("http://localhost:3000/pictures", 
                     {
                       method: "DELETE",
                       headers: {"Content-Type": "application/json"},
@@ -92,18 +91,17 @@ export default function Fotografen() {
     }, [photos]);
 
     return (
-        <section>
+        <section className="App-fotografen">
             <div className="camera">
-                <video ref={videoRef}>Video goes here:</video>
                 <button onClick={getVideo}>Start recording</button>
+                <video ref={videoRef}>Video goes here:</video>
             </div>
             <div className={'result' + (hasPhoto ? 'hasPhoto' : '')}>
-                <canvas ref={photoRef}></canvas>
                 <button onClick={TakePicture}>Take a picture</button>
+                <canvas ref={photoRef}></canvas>
             </div>
-            <h1>Här ska vi kunna se alla BILDER</h1>
-            <button onClick={GetPhotos}>BILDER</button>
-            <button>SHOW BILDER</button>
+            <h1>All available pictures will be displayed below</h1>
+            <button onClick={GetPhotos}>Show Pictures</button>
             <ul id="pictures"></ul>
         </section>
     );

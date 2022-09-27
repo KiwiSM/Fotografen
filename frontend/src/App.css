@@ -1,14 +1,96 @@
 .App {
+  display: flex;
+  flex-direction: column;
   text-align: center;
+  min-height: 100vh;
+  background-color: rgb(55, 55, 55);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.App h1 {
+  font-size: 36px;
+}
+
+.App h2 {
+  margin-top: 2rem;
+  margin-bottom: 0rem;
+  font-size: 22px;
+}
+
+.App h3 {
+  color: white;
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  font-size: 18px;
+}
+
+.main {
+  background-color: rgb(55, 55, 55);
+  min-height: 100vh; 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+button {
+  margin: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.4rem;
+  background-color: white;
+  width: 5rem;
+}
+
+input {
+  margin: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.4rem;
+  background-color: white;
+  height: 2rem;
+}
+
+#admin {
+  position: relative;
+  right: 9rem;
+}
+
+.App-fotografen {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  min-height: 100vh;
+  background-color: rgb(55, 55, 55);
+}
+
+.App-fotografen h1, h2, h3 {
+  color: white;
+  margin-left: 1rem;
+}
+
+.App-fotografen button {
+  margin: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.4rem;
+  background-color: white;
+  width: 7rem;
+}
+
+.resulthasPhoto {
+  display: flex;
+  flex-direction: column;
+}
+
+canvas {
+  width: 150px;
+  height: 80px;
 }
