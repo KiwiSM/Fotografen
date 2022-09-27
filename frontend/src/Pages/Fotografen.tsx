@@ -34,6 +34,7 @@ export default function Fotografen() {
 
         StoreImage(photo.toDataURL("image/jpeg"));
         setHasPhoto(true);
+        GetPhotos();
     }
 
     async function StoreImage(image:any) {
@@ -51,7 +52,7 @@ export default function Fotografen() {
         headers: {"Content-Type" : "application/json"}
         });
         const data = await response.json();
-    }
+    };
 
     async function GetPhotos() {
         const user = localStorage.getItem("username");
@@ -73,15 +74,17 @@ export default function Fotografen() {
             deleteButton.innerText = "Delete"
         
             deleteButton.addEventListener("click", () => {
-                function deleteProduct() {
-                    fetch("http://localhost:3000/images", 
+                async function deletePicture() {
+                    const response = await fetch("http://localhost:3000/images", 
                     {
                       method: "DELETE",
                       headers: {"Content-Type": "application/json"},
                       body: JSON.stringify({picture})
                     });
+                    const data = await response.json();
+                    setPhotos(data)
                 };
-                deleteProduct();
+                deletePicture();
             });
             document.getElementById("pictures").appendChild(images);
             document.getElementById("pictures").appendChild(deleteButton);
@@ -103,5 +106,5 @@ export default function Fotografen() {
             <button>SHOW BILDER</button>
             <ul id="pictures"></ul>
         </section>
-    )
-}
+    );
+};

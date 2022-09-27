@@ -74,10 +74,23 @@ app.post("/fotografen", async (request, response) => {
 
 app.delete("/images", async (request, response) => {
     const data = request.body;
+    console.log(data);
     const deletePicture = await picturesDB.remove({
         image: data.picture.image
     });
     console.log(deletePicture, "deleted");
+    const user = await accountsDB.find({ username: data.picture.username });
+    console.log(user);
+    if(user.length > 0) {
+        if(user[0].admin == true) {
+            console.log("hej");
+            const admin = await picturesDB.find({ admin: true})
+            response.json(admin);
+        } else {
+            const usernameExists = await picturesDB.find({ username: data.picture.username });
+            response.json(usernameExists);
+        }   
+    }
 })
 
 app.listen(port, function(err){
